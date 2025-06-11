@@ -5,8 +5,9 @@ import { showError } from '../components/error.js';
 export const getGeoData = async () => {
   const city = cityInput.value.trim();
 
-  if (!city) {
+  if (!city || !isCyrillic(city)) {
     showError('Проверьте название города');
+    return;
   }
 
   try {
@@ -29,5 +30,6 @@ export const getGeoData = async () => {
     
   } catch (error) {
     console.error(error.message);
+    showError('Данные не получены');
   }
 };
