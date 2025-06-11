@@ -1,14 +1,23 @@
 import { apiKey, baseUrl } from './apiKeyAndHost.js';
 import { cityInput } from '../components/inputForm.js';
 import { showError } from '../components/error.js';
+import { isCyrillic } from '../helpers/checkCyrillic.js';
+import { replaceAbbreviation } from '../helpers/cityAbbreviation.js';
+import { saveCityToLocalStorage } from '../helpers/saveCityToLocalStorage.js';
 
 export const getGeoData = async () => {
-  const city = cityInput.value.trim();
+  let city = cityInput.value.trim();
 
-  if (!city || !isCyrillic(city)) {
+  if (!city) {
+    return;
+  }
+
+  if (!isCyrillic(city)) {
     showError('Проверьте название города');
     return;
   }
+
+  city = replaceAbbreviation(city);
 
   try {
     const geoUrl = `${baseUrl}/geo/1.0/direct`;
@@ -26,6 +35,9 @@ export const getGeoData = async () => {
     }
     //деструктурируем приходящие данные согласно документации openweathermap
     const { lat, lon } = geoData[0];
+
+    saveCityToLocalStorage(city);
+
     console.log(lat, lon);
     
   } catch (error) {
