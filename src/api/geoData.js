@@ -1,5 +1,5 @@
 import { apiKey, baseUrl } from './apiKeyAndHost.js';
-import { cityInput } from '../components/inputForm.js';
+import { cityInput, getWeatherByForm } from '../components/inputForm.js';
 import { showError } from '../components/error.js';
 import { isCyrillic } from '../helpers/checkCyrillic.js';
 import { replaceAbbreviation } from '../helpers/cityAbbreviation.js';
@@ -38,7 +38,8 @@ export const getGeoData = async () => {
 
     saveCityToLocalStorage(city);
 
-    console.log(lat, lon);
+    const weatherData = await getWeatherByForm(lat, lon);
+    const forecastData = await getWeatherByForm(lat, lon);
     
   } catch (error) {
     console.error(error.message);
