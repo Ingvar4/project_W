@@ -6,6 +6,7 @@ import { replaceAbbreviation } from '../helpers/cityAbbreviation.js';
 import { saveCityToLocalStorage } from '../helpers/saveCityToLocalStorage.js';
 import { getWeather, getForecast } from './getWeatherAndForecast.js';
 import { renderCurrentWeather } from '../components/currentWeather.js';
+import { renderHourlyForecast } from '../components/hourlyForecast.js';
 
 export const getGeoData = async () => {
   let city = cityInput.value.trim();
@@ -47,6 +48,7 @@ export const getGeoData = async () => {
     console.log(forecastData);
     
     renderCurrentWeather(weatherData, city);
+    renderHourlyForecast(forecastData);
 
   } catch (error) {
     console.error(error.message);
