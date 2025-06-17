@@ -1,7 +1,13 @@
+import { showError } from "./error.js";
+
 const hourlyForecast = document.querySelector('.hourly-scroll');
 
 export const renderHourlyForecast = (data) => {
   hourlyForecast.innerHTML = '';
+
+  if(!data) {
+    showError('Данные о погоде недоступны');
+  }
 
   const currentDate = new Date();
 
@@ -9,8 +15,10 @@ export const renderHourlyForecast = (data) => {
 
   const daysOfWeek = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб',];
 
+  const timezoneOffset = data.city.timezone * 1000;
+
   data.list.forEach((item) => {
-    const date = new Date(item.dt * 1000);
+    const date = new Date(item.dt * 1000 + timezoneOffset);
     const hour = date.getHours();
     const temp = Math.round(item.main.temp);
     const icon = item.weather[0].icon;
@@ -38,7 +46,7 @@ export const renderHourlyForecast = (data) => {
       <p class="hour">${dayLabel}</p>
       <p class="hour">${hour}:00</p>
       <img
-        src="https://openweathermap.org/img/wn/${icon}.png"
+        src="https://openweathermap.org/img/wn/${icon}@4x.png"
         alt="Погода"
       />
       <p class="temp">${temp} °C</p>
